@@ -19,6 +19,7 @@ import argparse
 import numpy as np
 import bohrium as bh
 from functools import reduce
+import six.moves
 
 class TYPES:
     NORMAL_INT   = ['np.int32','np.int64','np.uint32','np.uint64']
@@ -49,13 +50,13 @@ class _C:
         self.ENDC = ''
 
 def gen_shapes(max_ndim, max_dim, iters=0, min_ndim=1):
-    for ndim in xrange(min_ndim,max_ndim+1):
+    for ndim in six.moves.range(min_ndim,max_ndim+1):
         shape = [1]*ndim
         if iters:
             yield shape #Min shape
             yield [max_dim]*(ndim) #Max shape
-            for _ in xrange(iters):
-                for d in xrange(len(shape)):
+            for _ in six.moves.range(iters):
+                for d in six.moves.range(len(shape)):
                     shape[d] = np.random.randint(1,max_dim)
                 yield shape
         else:
@@ -81,37 +82,37 @@ def gen_views(max_ndim, max_dim, iters=0, min_ndim=1, dtype="np.float32"):
         cmd = "a[0] = self.array(%s,%s);"%(shape, dtype)
         yield cmd
         #Views with offset per dimension
-        for d in xrange(len(shape)):
+        for d in six.moves.range(len(shape)):
             if shape[d] > 1:
                 s = "a[0] = a[0]["
-                for _ in xrange(d):
+                for _ in six.moves.range(d):
                     s += ":,"
                 s += "1:,"
-                for _ in xrange(len(shape)-(d+1)):
+                for _ in six.moves.range(len(shape)-(d+1)):
                     s += ":,"
                 s = s[:-1] + "];"
                 yield cmd + s
 
         #Views with negative offset per dimension
-        for d in xrange(len(shape)):
+        for d in six.moves.range(len(shape)):
             if shape[d] > 1:
                 s = "a[0] = a[0]["
-                for _ in xrange(d):
+                for _ in six.moves.range(d):
                     s += ":,"
                 s += ":-1,"
-                for _ in xrange(len(shape)-(d+1)):
+                for _ in six.moves.range(len(shape)-(d+1)):
                     s += ":,"
                 s = s[:-1] + "];"
                 yield cmd + s
 
         #Views with steps per dimension
-        for d in xrange(len(shape)):
+        for d in six.moves.range(len(shape)):
             if shape[d] > 1:
                 s = "a[0] = a[0]["
-                for _ in xrange(d):
+                for _ in six.moves.range(d):
                     s += ":,"
                 s += "::2,"
-                for _ in xrange(len(shape)-(d+1)):
+                for _ in six.moves.range(len(shape)-(d+1)):
                     s += ":,"
                 s = s[:-1] + "];"
                 yield cmd + s

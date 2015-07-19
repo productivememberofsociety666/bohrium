@@ -15,6 +15,7 @@ from .ndarray import get_bhc, get_base, fix_returned_biclass
 from . import ndarray
 from . import target
 from .array_manipulation import broadcast_arrays
+import six
 
 @fix_returned_biclass
 def extmethod(name, out, in1, in2):
@@ -121,7 +122,7 @@ class Ufunc(object):
             pass
 
         #We do not support NumPy's exotic arguments
-        for k, val in kwargs.iteritems():
+        for k, val in six.iteritems(kwargs):
             if val is not None:
                 raise ValueError(
                     "Bohrium funcs doesn't support the '%s' argument" % str(k)
@@ -148,7 +149,7 @@ class Ufunc(object):
                 return out
 
         #Copy broadcasted array back to 'args' excluding scalars
-        for i in xrange(len(args)):
+        for i in six.moves.range(len(args)):
             if not np.isscalar(args[i]):
                 args[i] = bargs[i]
 
@@ -169,7 +170,7 @@ class Ufunc(object):
         (out_dtype, in_dtype) = _util.type_sig(self.info['name'], args)
 
         #Convert dtype of all inputs
-        for i in xrange(len(args)):
+        for i in six.moves.range(len(args)):
             if not np.isscalar(args[i]) and not dtype_equal(args[i], in_dtype):
                 tmp = array_create.empty_like(args[i], dtype=in_dtype)
                 tmp[...] = args[i]
@@ -309,7 +310,7 @@ class Ufunc(object):
         #Check for out of bounds and convert negative axis values
         if len(axis) > ary.ndim:
             raise ValueError("number of 'axises' to reduce is out of bounds")
-        for i in xrange(len(axis)):
+        for i in six.moves.range(len(axis)):
             if axis[i] < 0:
                 axis[i] = ary.ndim+axis[i]
             if axis[i] >= ary.ndim:
@@ -465,7 +466,7 @@ UFUNCS = [
     Negative({'name':'negative'}),
     Sign({'name':'sign'})
 ]    # Expose via UFUNCS
-for op in _info.op.itervalues():
+for op in six.itervalues(_info.op):
     UFUNCS.append(Ufunc(op))
 
 for ufunc in UFUNCS:                        # Expose via their name.

@@ -8,6 +8,7 @@ import numpy_force as numpy
 from . import ndarray
 from .ndarray import fix_returned_biclass
 import itertools
+import six.moves
 
 @fix_returned_biclass
 def flatten(ary):
@@ -346,7 +347,7 @@ def broadcast_arrays(*args):
     """
     ret = []
     bargs = numpy.broadcast_arrays(*args)
-    for a, b in itertools.izip(args, bargs):
+    for a, b in six.moves.zip(args, bargs):
         if numpy.isscalar(a):
             ret.append(b)
         elif ndarray.identical_views(a, b):

@@ -13,6 +13,7 @@ import os
 import sys
 from bohrium import target
 import math
+from functools import reduce
 
 from libc.stdint cimport uint64_t, uint32_t
 

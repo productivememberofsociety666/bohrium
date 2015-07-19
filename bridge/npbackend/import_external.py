@@ -4,6 +4,7 @@ import inspect
 from importlib import import_module
 from . import ndarray
 import numpy_force as numpy
+import six.moves
 
 def bohriumify(obj):
     """Returns a bohrium compatible version of 'obj'"""
@@ -37,7 +38,7 @@ def api(objs):
         if len(body) > 0:
             body[0] = "bohrium"
             #Lets create all modules in 'body'
-            for i in xrange(len(body)):
+            for i in six.moves.range(len(body)):
                 prefix = body[:i]
                 fullname = '.'.join(body[:i+1])
                 if fullname not in sys.modules:

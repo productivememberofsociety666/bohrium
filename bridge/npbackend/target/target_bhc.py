@@ -8,6 +8,7 @@ from .._util import dtype_name
 from . import interface
 import functools
 import operator
+import six.moves
 
 class Base(interface.Base):
     """base array handle"""
@@ -52,7 +53,7 @@ def _bhc_exec(func, *args):
     """execute the 'func' with the bhc objects in 'args'"""
 
     args = list(args)
-    for i in xrange(len(args)):
+    for i in six.moves.range(len(args)):
         if isinstance(args[i], View):
             args[i] = args[i].bhc_obj
     return func(*args)
