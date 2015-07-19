@@ -65,20 +65,24 @@ def get_data_pointer(ary, allocate=False, nullify=False):
 
     dtype = dtype_name(ary)
     ary = ary.bhc_obj
-    exec("bhc.bh_multi_array_%s_sync(ary)" % dtype)
-    exec("bhc.bh_multi_array_%s_discard(ary)" % dtype)
-    exec("bhc.bh_runtime_flush()")
-    exec("data = bhc.bh_multi_array_%s_get_data(ary)" % dtype)
+    d = locals()
+    exec("bhc.bh_multi_array_%s_sync(ary)" % dtype, globals(), d)
+    exec("bhc.bh_multi_array_%s_discard(ary)" % dtype, globals(), d)
+    exec("bhc.bh_runtime_flush()", globals(), d)
+    exec("data = bhc.bh_multi_array_%s_get_data(ary)" % dtype, globals(), d)
+    data = d["data"]
     if data is None:
         if not allocate:
             return 0
         exec("data = bhc.bh_multi_array_%s_get_data_and_force_alloc(ary)"
-             % dtype
+             % dtype,
+             globals(), d
         )
+        data = d["data"]
         if data is None:
             raise MemoryError()
     if nullify:
-        exec("bhc.bh_multi_array_%s_nullify_data(ary)"%dtype)
+        exec("bhc.bh_multi_array_%s_nullify_data(ary)"%dtype, globals(), d)
     return int(data)
 
 def set_bhc_data_from_ary(self, ary):
