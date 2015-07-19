@@ -11,7 +11,9 @@ class test_accumulate(numpytest):
         for v in gen_views(4,8,6,min_ndim=1):
             a = {}
             self.axis = 0
-            exec(v)
+            d = locals()
+            exec(v, globals(), d)
+            a = d["a"]
             yield (a,v)
             for axis in range(1,a[0].ndim):
                 exec(v)
@@ -23,7 +25,9 @@ class test_accumulate(numpytest):
             cmd = "res = bh.add.accumulate(a[0],axis=%d)"%self.axis
         else:
             cmd = "res = np.add.accumulate(a[0],axis=%d)"%self.axis
-        exec(cmd)
+        d = locals()
+        exec(cmd, globals(), d)
+        res = d["res"]
         return (res,cmd)
 
     def test_cumprod(self,a):
@@ -31,5 +35,7 @@ class test_accumulate(numpytest):
             cmd = "res = bh.multiply.accumulate(a[0],axis=%d)"%self.axis
         else:
             cmd = "res = np.multiply.accumulate(a[0],axis=%d)"%self.axis
-        exec(cmd)
+        d = locals()
+        exec(cmd, globals(), d)
+        res = d["res"]
         return (res,cmd)

@@ -94,11 +94,15 @@ class test_sor(numpytest):
         for t in ['np.float32','np.float64']:
             a = {}
             cmd  = "a[0] = sor_setup({0},{0},dtype={1});".format(self.size,t)
-            exec(cmd)
+            d = locals()
+            exec(cmd, globals(), d)
+            a = d["a"]
             yield (a,cmd)
 
     def test_sor(self,a):
         cmd = "res = sor_compute(a[0]);"
-        exec(cmd)
+        d = locals()
+        exec(cmd, globals(), d)
+        res = d["res"]
         return (res,cmd)
 
