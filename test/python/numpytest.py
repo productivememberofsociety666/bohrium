@@ -259,12 +259,12 @@ class BenchHelper:
             stderr  = subprocess.PIPE,
         )
         out, err = p.communicate()
-        if 'elapsed-time' not in out:
+        if 'elapsed-time' not in out.decode("utf-8"):
             raise Exception("Cannot find elapsed time got stdout(%s) stderr(%s)]" % (out, err))
 
         if not os.path.exists(outputfn):
             raise Exception('Benchmark did not produce any output, expected: %s' % outputfn)
-        #        
+        #
         # We silently accept these errors when output to stderr:
         #
         #   * The Python object count

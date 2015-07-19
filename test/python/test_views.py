@@ -21,12 +21,16 @@ class test_flatten(numpytest):
 
     def test_flatten_self(self,a):
         cmd = "res = a[0].flatten()"
-        exec(cmd)
+        d = locals()
+        exec(cmd, globals(), d)
+        res = d["res"]
         return (res,cmd)
 
     def test_ravel_self(self,a):
         cmd = "res = a[0].ravel()"
-        exec(cmd)
+        d = locals()
+        exec(cmd, globals(), d)
+        res = d["res"]
         return (res,cmd)
 
 class test_diagonal(numpytest):
