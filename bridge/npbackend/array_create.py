@@ -9,6 +9,7 @@ from .ndarray import fix_returned_biclass
 import numpy_force as numpy
 from ._util import dtype_equal, dtype_in
 from . import target
+import six.moves
 
 @fix_returned_biclass
 def array(obj, dtype=None, copy=False, order=None, subok=False, ndmin=0, bohrium=True):
@@ -115,7 +116,7 @@ def array(obj, dtype=None, copy=False, order=None, subok=False, ndmin=0, bohrium
                 t = empty_like(ary, dtype=dtype)
                 t[...] = ary
                 ary = t
-            for i in xrange(ary.ndim, ndmin):
+            for i in six.moves.range(ary.ndim, ndmin):
                 ary = numpy.expand_dims(ary, i)
             return ary
         else:
