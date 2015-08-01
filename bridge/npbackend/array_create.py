@@ -9,6 +9,7 @@ from .ndarray import fix_returned_biclass
 import numpy_force as numpy
 from ._util import dtype_equal, dtype_in
 from . import target
+import six
 import six.moves
 
 @fix_returned_biclass
@@ -521,7 +522,7 @@ def arange(start, stop=None, step=1, dtype=None, bohrium=True):
 
 @fix_returned_biclass
 def range(size, dtype=numpy.uint64):
-    if not isinstance(size, (int, long)):
+    if not isinstance(size, six.integer_types):
         raise ValueError("size must be an integer")
     if size < 1:
         raise ValueError("size must be greater than 0")
